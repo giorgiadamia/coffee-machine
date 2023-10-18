@@ -1,6 +1,6 @@
 package com.example.coffeemachine.controller;
 
-import com.example.coffeemachine.entity.CoffeeMachine;
+import com.example.coffeemachine.controller.dto.CoffeeMachineDto;
 import com.example.coffeemachine.service.CoffeeMachineService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,16 +21,16 @@ public class CoffeeMachineController {
 
     @PostMapping("/create")
     @Operation(summary = "Create a coffee machine")
-    public ResponseEntity<Void> createCoffeeMachine(@RequestBody CoffeeMachine coffeeMachine) {
-        coffeeMachineService.createCoffeeMachine(coffeeMachine);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<CoffeeMachineDto> createCoffeeMachine(@RequestBody CoffeeMachineDto coffeeMachineDto) {
+        CoffeeMachineDto createdCoffeeMachineDto = coffeeMachineService.createCoffeeMachine(coffeeMachineDto);
+        return new ResponseEntity<>(createdCoffeeMachineDto, HttpStatus.CREATED);
     }
 
     @GetMapping
     @Operation(summary = "Display all coffee machines")
-    public ResponseEntity<List<CoffeeMachine>> getAllCoffeeMachines() {
-        List<CoffeeMachine> coffeeMachines = coffeeMachineService.getAllCoffeeMachines();
-        return new ResponseEntity<>(coffeeMachines, HttpStatus.OK);
+    public ResponseEntity<List<CoffeeMachineDto>> getAllCoffeeMachines() {
+        List<CoffeeMachineDto> coffeeMachinesDtos = coffeeMachineService.getAllCoffeeMachines();
+        return new ResponseEntity<>(coffeeMachinesDtos, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
