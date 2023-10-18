@@ -1,6 +1,7 @@
 package com.example.coffeemachine.service;
 
 import com.example.coffeemachine.controller.dto.CoffeeMachineDto;
+import com.example.coffeemachine.controller.dto.CoffeeMachineResponseDto;
 import com.example.coffeemachine.entity.CoffeeMachine;
 import com.example.coffeemachine.repository.CoffeeMachineRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,7 +18,7 @@ public class CoffeeMachineService {
 
     private final CoffeeMachineRepository coffeeMachineRepository;
 
-    public CoffeeMachineDto createCoffeeMachine(CoffeeMachineDto coffeeMachineDto) {
+    public CoffeeMachineResponseDto createCoffeeMachine(CoffeeMachineDto coffeeMachineDto) {
         if (coffeeMachineDto.getName() == null || coffeeMachineDto.getName().equals("")) {
             throw new IllegalArgumentException("Name is required");
         }
@@ -28,30 +29,9 @@ public class CoffeeMachineService {
             throw new IllegalArgumentException("Coffee machine with this name already exists");
         }
 
-        CoffeeMachine coffeeMachine = new CoffeeMachine();
-        coffeeMachine.setName(coffeeMachineDto.getName());
-
-        if (coffeeMachineDto.getIsOn() == null) {
-            coffeeMachineDto.setIsOn(false);
-            coffeeMachine.setIsOn(false);
-        }
-
-        if (coffeeMachineDto.getCoffeeLevel() == null) {
-            coffeeMachineDto.setCoffeeLevel(0);
-            coffeeMachine.setCoffeeLevel(0);
-        }
-
-        if (coffeeMachineDto.getCapacity() == null) {
-            coffeeMachineDto.setCapacity(10);
-            coffeeMachine.setCapacity(10);
-        }
-
-        coffeeMachine.setIsOn(coffeeMachineDto.getIsOn());
-        coffeeMachine.setCoffeeLevel(coffeeMachineDto.getCoffeeLevel());
-        coffeeMachine.setCapacity(coffeeMachineDto.getCapacity());
-
+        CoffeeMachine coffeeMachine = mapToEntity(coffeeMachineDto);
         coffeeMachineRepository.save(coffeeMachine);
-        return coffeeMachineDto;
+        return mapToResponseDto(coffeeMachine);
     }
 
     public void turnOnCoffeeMachine(Long id) {
@@ -76,17 +56,9 @@ public class CoffeeMachineService {
         coffeeMachineRepository.save(coffeeMachine);
     }
 
-    public List<CoffeeMachineDto> getAllCoffeeMachines() {
+    public List<CoffeeMachineResponseDto> getAllCoffeeMachines() {
         List<CoffeeMachine> coffeeMachines = coffeeMachineRepository.findAll();
-
-        return coffeeMachines.stream().map(coffeeMachine -> {
-            CoffeeMachineDto coffeeMachineDto = new CoffeeMachineDto();
-            coffeeMachineDto.setName(coffeeMachine.getName());
-            coffeeMachineDto.setIsOn(coffeeMachine.getIsOn());
-            coffeeMachineDto.setCapacity(coffeeMachine.getCapacity());
-            coffeeMachineDto.setCoffeeLevel(coffeeMachine.getCoffeeLevel());
-            return coffeeMachineDto;
-        }).collect(Collectors.toList());
+        return coffeeMachines.stream().map(this::mapToResponseDto).collect(Collectors.toList());
     }
 
     public void pourCoffee(Long id, Integer quantity) {
@@ -127,5 +99,41 @@ public class CoffeeMachineService {
             throw new EntityNotFoundException("Coffee machine with such id does not exist");
         }
         return coffeeMachineOptional.get();
+    }
+
+    private CoffeeMachineResponseDto mapToResponseDto(CoffeeMachine coffeeMachine) {
+        CoffeeMachineResponseDto coffeeMachineResponseDto = new CoffeeMachineResponseDto();
+        coffeeMachineResponseDto.setId(coffeeMachine.getId());
+        coffeeMachineResponseDto.setName(coffeeMachine.getName());
+        coffeeMachineResponseDto.setIsOn(coffeeMachine.getIsOn());
+        coffeeMachineResponseDto.setCoffeeLevel(coffeeMachine.getCoffeeLevel());
+        coffeeMachineResponseDto.setCapacity(coffeeMachine.getCapacity());
+
+        return coffeeMachineResponseDto;
+    }
+
+    private CoffeeMachine mapToEntity(CoffeeMachineDto coffeeMachineDto) {
+        CoffeeMachine coffeeMachine = new CoffeeMachine();
+        coffeeMachine.setName(coffeeMachineDto.getName());
+
+        if (coffeeMachineDto.getIsOn() == null) {
+            coffeeMachine.setIsOn(false);
+        } else {
+            coffeeMachine.setIsOn(coffeeMachineDto.getIsOn());
+        }
+
+        if (coffeeMachineDto.getCoffeeLevel() == null) {
+            coffeeMachine.setCoffeeLevel(0);
+        } else {
+            coffeeMachine.setCoffeeLevel(coffeeMachineDto.getCoffeeLevel());
+        }
+
+        if (coffeeMachineDto.getCapacity() == null) {
+            coffeeMachine.setCapacity(10);
+        } else {
+            coffeeMachine.setCapacity(coffeeMachineDto.getCapacity());
+        }
+
+        return coffeeMachine;
     }
 }
