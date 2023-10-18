@@ -19,6 +19,12 @@ public class CoffeeMachine {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "capacity")
+    private Integer capacity;
+
+    @Column(name = "coffee_level")
+    private Integer coffeeLevel;
+
     @Column(name = "is_on")
     private Boolean isOn;
 }
