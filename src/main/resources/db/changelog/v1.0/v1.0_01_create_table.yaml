@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: v1.0_01_create_table_coffee_machine
+      author: giorgi
+      changes:
+        - createTable:
+            tableName: coffee_machine
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: is_on
+                  type: boolean
+              - column:
+                  name: capacity
+                  type: integer
+              - column:
+                  name: coffee_level
+                  type: integer
