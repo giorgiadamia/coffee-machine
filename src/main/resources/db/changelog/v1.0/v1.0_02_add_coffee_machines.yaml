@@ -1,0 +1,80 @@
+databaseChangeLog:
+  - changeSet:
+      id: v1.0_02_add_coffee_machines
+      author: giorgi
+      changes:
+        - insert:
+            tableName: coffee_machine
+            columns:
+              - column:
+                  name: name
+                  value: "first_machine"
+              - column:
+                  name: is_on
+                  value: true
+              - column:
+                  name: capacity
+                  value: 12
+              - column:
+                  name: coffee_level
+                  value: 3
+        - insert:
+            tableName: coffee_machine
+            columns:
+              - column:
+                  name: name
+                  value: "second_machine"
+              - column:
+                  name: is_on
+                  value: true
+              - column:
+                  name: capacity
+                  value: 20
+              - column:
+                  name: coffee_level
+                  value: 14
+        - insert:
+            tableName: coffee_machine
+            columns:
+              - column:
+                  name: name
+                  value: "third_machine"
+              - column:
+                  name: is_on
+                  value: false
+              - column:
+                  name: capacity
+                  value: 8
+              - column:
+                  name: coffee_level
+                  value: 0
+        - insert:
+            tableName: coffee_machine
+            columns:
+              - column:
+                  name: name
+                  value: "fourth_machine"
+              - column:
+                  name: is_on
+                  value: false
+              - column:
+                  name: capacity
+                  value: 4
+              - column:
+                  name: coffee_level
+                  value: 4
+        - insert:
+            tableName: coffee_machine
+            columns:
+              - column:
+                  name: name
+                  value: "fifth_machine"
+              - column:
+                  name: is_on
+                  value: true
+              - column:
+                  name: capacity
+                  value: 14
+              - column:
+                  name: coffee_level
+                  value: 4
